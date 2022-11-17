@@ -29,7 +29,7 @@ posts_id_searchQuran = معرف منشور الباحث القرآني
 
 <br><br>
 
-(Windows) PowerShell Administrator
+# (Windows) PowerShell Administrator
 
 install choco
 
