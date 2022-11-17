@@ -1,0 +1,19 @@
+{
+  "name": "mastodon-bot-islami",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "rn0x",
+  "license": "MIT",
+  "dependencies": {
+    "file-type": "^18.0.0",
+    "fs-extra": "^10.1.0",
+    "html-to-text": "^8.2.1",
+    "moment-hijri": "^2.1.2",
+    "node-fetch": "^3.3.0",
+    "puppeteer": "^19.2.2"
+  }
+}
