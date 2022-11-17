@@ -49,15 +49,15 @@ await client.Notifications('mention', async e => {
         created_at: e?.status?.created_at,
         in_reply_to_id: e?.status?.in_reply_to_id,
         uri: e?.status?.uri,
-        content: convert(e?.status?.content)?.split('] ')[1] || convert(e?.status?.content)?.split(' @')[0]
+        content: convert(e?.status?.content)?.split(']')[1]?.replace(/\n/g, '') || convert(e?.status?.content)?.split('@')[0]?.replace(/\n/g, '')
     }
 
     if (status.in_reply_to_id === config?.posts_id_searchQuran) {
 
-        let search = await searchQuran(status.content, 'search').catch(e => console.log(e));
-        let tafser1 = await searchQuran(status.content, 'tafser1').catch(e => console.log(e));
-        let tafser2 = await searchQuran(status.content, 'tafser2').catch(e => console.log(e));
-        let english = await searchQuran(status.content, 'english').catch(e => console.log(e));
+        let search = await searchQuran(status?.content?.replace(/\n/g, ''), 'search').catch(e => console.log(e));
+        let tafser1 = await searchQuran(status?.content?.replace(/\n/g, ''), 'tafser1').catch(e => console.log(e));
+        let tafser2 = await searchQuran(status?.content?.replace(/\n/g, ''), 'tafser2').catch(e => console.log(e));
+        let english = await searchQuran(status?.content?.replace(/\n/g, ''), 'english').catch(e => console.log(e));
 
 
         if (search || tafser1 || tafser2 || english) {
@@ -86,6 +86,7 @@ await client.Notifications('mention', async e => {
         }
 
     }
+
 }).catch(e => console.log(e));
 
 
@@ -138,7 +139,7 @@ setInterval(async () => {
             text += `التاريخ الميلادي: ${event?.Gregorian}`
             let up = await client.Upload(buffer).catch(e => console.log(e));
             await client.Publish(text, up?.id).catch(e => console.log(e));
-            
+
         }).catch(error => console.log(error));
 
     }
