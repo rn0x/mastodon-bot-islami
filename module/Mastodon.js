@@ -60,7 +60,7 @@ export default class Mastodon {
                 'Authorization': 'Bearer ' + this.token,
             },
             body: formData,
-        });
+        }).catch(e => console.log(e));
         let json = await response?.json().catch(e => console.log(e));
 
         if (json?.error) {
@@ -96,7 +96,7 @@ export default class Mastodon {
                 'Authorization': 'Bearer ' + this.token,
             },
             body: JSON.stringify(Parameters),
-        });
+        }).catch(e => console.log(e));
         let json = await response?.json().catch(e => console.log(e));
 
         if (json?.error) {
@@ -127,7 +127,7 @@ export default class Mastodon {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + this.token,
                 },
-            });
+            }).catch(e => console.log(e));
             let json = await response?.json().catch(e => console.log(e));
 
             if (json?.error) {
@@ -171,7 +171,7 @@ export default class Mastodon {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + this.token,
                 },
-            });
+            }).catch(e => console.log(e));
             let json = await response?.json().catch(e => console.log(e));
 
             if (json?.error) {
@@ -216,7 +216,7 @@ export default class Mastodon {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + this.token,
             },
-        });
+        }).catch(e => console.log(e));
         let json = await response?.json().catch(e => console.log(e));
 
         if (json?.error) {
