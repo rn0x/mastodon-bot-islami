@@ -1,6 +1,6 @@
 # mastodon-bot-islami
 
-مثال على البوت (@qqq)[https://bassam.social/@qqq]
+مثال على البوت [@qqq](https://bassam.social/@qqq)
 
 ```json
 {
