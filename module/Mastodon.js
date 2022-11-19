@@ -61,7 +61,7 @@ export default class Mastodon {
             },
             body: formData,
         });
-        let json = await response?.json();
+        let json = await response?.json().catch(e => console.log(e));
 
         if (json?.error) {
 
@@ -97,7 +97,7 @@ export default class Mastodon {
             },
             body: JSON.stringify(Parameters),
         });
-        let json = await response?.json();
+        let json = await response?.json().catch(e => console.log(e));
 
         if (json?.error) {
 
@@ -121,14 +121,14 @@ export default class Mastodon {
         setInterval(async () => {
 
             let EventTag = fs.readJsonSync('./database/EventTag.json');
-            let response = await fetch(`${this.url}/api/v1/timelines/${tag ? `tag/:${tag}` : 'public'}?only_media=${only_media}&limit=1`, {
+            let response = await fetch(`${this.url}/api/v1/timelines/${tag ? `tag/:${tag}` : 'public'}?only_media=${only_media}&limit=1&local=true`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + this.token,
                 },
             });
-            let json = await response?.json();
+            let json = await response?.json().catch(e => console.log(e));
 
             if (json?.error) {
 
@@ -138,10 +138,14 @@ export default class Mastodon {
 
             else {
 
-                if (EventTag?.includes(json[0]?.id) === false) {
-                    callback(json[0]);
-                    EventTag.push(json[0]?.id);
-                    fs.writeJsonSync('./database/EventTag.json', EventTag);
+                if (Array.isArray(json)) {
+
+                    if (EventTag?.includes(json?.[0]?.id) === false) {
+                        callback(json?.[0]);
+                        EventTag.push(json?.[0]?.id);
+                        fs.writeJsonSync('./database/EventTag.json', EventTag);
+                    }
+
                 }
 
             }
@@ -161,14 +165,14 @@ export default class Mastodon {
         setInterval(async () => {
 
             let EventNotifications = fs.readJsonSync('./database/EventNotifications.json');
-            let response = await fetch(`${this.url}/api/v1/notifications`, {
+            let response = await fetch(`${this.url}/api/v1/notifications?limit=1`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + this.token,
                 },
             });
-            let json = await response?.json();
+            let json = await response?.json().catch(e => console.log(e));
 
             if (json?.error) {
 
@@ -178,18 +182,49 @@ export default class Mastodon {
 
             else {
 
-                if (EventNotifications?.includes(json[0]?.id) === false) {
-                    if (json[0]?.type === type || type === 'all') {
+                if (Array.isArray(json)) {
 
-                        callback(json[0]);
-                        EventNotifications.push(json[0]?.id);
-                        fs.writeJsonSync('./database/EventNotifications.json', EventNotifications);
+                    if (EventNotifications?.includes(json?.[0]?.id) === false) {
 
+                        if (json?.[0]?.type === type || type === 'all') {
+
+                            callback(json?.[0]);
+                            EventNotifications.push(json?.[0]?.id);
+                            fs.writeJsonSync('./database/EventNotifications.json', EventNotifications);
+
+                        }
                     }
                 }
 
             }
 
         }, 6000);
+    }
+
+    /** 
+     * إضافة منشور إلى قائمة المفضلة الخاصة بك.
+     * 
+     * @param {string} id Local ID of a posts.
+     * @return {Promise<object>} return json.
+     */
+
+    async like(id) {
+
+        let response = await fetch(`${this.url}/api/v1/statuses/${id}/favourite`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.token,
+            },
+        });
+        let json = await response?.json().catch(e => console.log(e));
+
+        if (json?.error) {
+
+            return json?.error
+
+        }
+
+        else return json
     }
 }

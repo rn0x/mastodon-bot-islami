@@ -35,6 +35,8 @@ import Hijri_calendar from './module/Hijri_calendar/index.js';
 let config = fs.readJSONSync('./config.json');
 let client = new Mastodon(config?.url, config?.token);
 
+console.log('Starting Bot Mastodon :', moment_hijri().locale('en-EN').format('LT'));
+
 await client.Notifications('mention', async e => {
 
     let account = {
@@ -76,7 +78,7 @@ await client.Notifications('mention', async e => {
             }).catch(e => console.log(e));
             let buffer = fs.readFileSync(scrQuran?.filename);
             let up = await client.Upload(buffer).catch(e => console.log(e));
-            await client.Publish('#تفسير الجلالين #تفسير_الميسر # القرآن_الكريم', up?.id, status.id).catch(e => console.log(e));
+            await client.Publish('#تفسير_الجلالين #تفسير_الميسر #القرآن_الكريم', up?.id, status.id).catch(e => console.log(e));
         }
 
         else {
@@ -94,7 +96,7 @@ setInterval(async () => {
 
     let time = moment_hijri().locale('en-EN').format('LT');
 
-    if (time === '7:19 AM') {
+    if (time === '7:00 PM') {
 
         let mp3quran = fs.readJsonSync('./files/json/mp3quran.json');
         let quran = fs.readJsonSync('./files/json/Quran.json');
@@ -115,7 +117,10 @@ setInterval(async () => {
             let res = await fetch(url).catch(e => console.log(e));
             let buffer = Buffer.from(await res?.arrayBuffer());
             let up = await client.Upload(buffer).catch(e => console.log(e));
-            await client.Publish(text, up?.id).catch(e => console.log(e));
+
+            if (up?.id) {
+                await client.Publish(text, up?.id).catch(e => console.log(e));
+            }
         }
 
     }
@@ -134,14 +139,40 @@ setInterval(async () => {
 
             let buffer = fs.readFileSync(event?.filename);
             let text = '#التقويم_الهجري 📅\n\n'
-            text += `اليوم: ${event?.today}\n`
+            text += `اليوم: #${event?.today}\n`
             text += `التاريخ الهجري: ${event?.Hijri}\n`
             text += `التاريخ الميلادي: ${event?.Gregorian}`
             let up = await client.Upload(buffer).catch(e => console.log(e));
-            await client.Publish(text, up?.id).catch(e => console.log(e));
+
+            if (up?.id) {
+                await client.Publish(text, up?.id).catch(e => console.log(e));
+            }
 
         }).catch(error => console.log(error));
 
     }
 
+    else if (time === '8:00 AM') {
+
+
+        let video = fs.readJsonSync('./files/json/video.json');
+        let random = video[Math.floor(Math.random() * video.length)];
+        let res = await fetch(random?.path).catch(e => console.log(e));
+        let buffer = Buffer.from(await res?.arrayBuffer());
+        let up = await client.Upload(buffer).catch(e => console.log(e));
+        let text = 'ـ ❁ …\n\n\nارح سمعك وقلبك 💛 \n\n#فيديو_عشوائي #قرآن #بسام #quran';
+        
+        if (up?.id) {
+            await client.Publish(text, up?.id).catch(e => console.log(e));
+        }
+
+    }
+
 }, 60000);
+
+
+await client.EventTag(false, undefined, async e => {
+
+    await client.like(e?.id).catch(e => console.log(e));
+    
+}).catch(e => console.log(e));

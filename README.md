@@ -1,5 +1,6 @@
 # mastodon-bot-islami
 
+مثال على البوت (@qqq)[https://bassam.social/@qqq]
 
 ```json
 {
@@ -29,7 +30,7 @@ posts_id_searchQuran = معرف منشور الباحث القرآني
 
 <br><br>
 
-# (Windows) PowerShell Administrator
+(Windows) PowerShell Administrator
 
 install choco
 
