@@ -29,6 +29,7 @@ import searchQuran from './module/searchQuran.js';
 import screenshot from './module/searchQuran/index.js';
 import file_size from './module/file_size.js';
 import Hijri_calendar from './module/Hijri_calendar/index.js';
+import path from 'path';
 
 
 
@@ -108,7 +109,7 @@ setInterval(async () => {
         let the_reader = mp3json?.name;
         let url = `${mp3json?.Server}/${number}.mp3`;
         let FileSize = await file_size(url);
-        let text = `ـ ❁ …\n\n\nسورة #${surah_name}\nالقارئ #${the_reader}`;
+        let text = `ـ ❁ …\n\n\nسورة #${surah_name}\nالقارئ #${the_reader} \n\n\n#quran #islamic #islam #bassam`;
 
         console.log(FileSize);
 
@@ -141,7 +142,7 @@ setInterval(async () => {
             let text = '#التقويم_الهجري 📅\n\n'
             text += `اليوم: #${event?.today}\n`
             text += `التاريخ الهجري: ${event?.Hijri}\n`
-            text += `التاريخ الميلادي: ${event?.Gregorian}`
+            text += `التاريخ الميلادي: ${event?.Gregorian} \n\n\n #islamic #islam #bassam #calendar`
             let up = await client.Upload(buffer).catch(e => console.log(e));
 
             if (up?.id) {
@@ -152,7 +153,7 @@ setInterval(async () => {
 
     }
 
-    else if (time === '8:00 AM') {
+    else if (time === '11:30 AM') {
 
 
         let video = fs.readJsonSync('./files/json/video.json');
@@ -160,7 +161,7 @@ setInterval(async () => {
         let res = await fetch(random?.path).catch(e => console.log(e));
         let buffer = Buffer.from(await res?.arrayBuffer());
         let up = await client.Upload(buffer).catch(e => console.log(e));
-        let text = 'ـ ❁ …\n\n\nارح سمعك وقلبك 💛 \n\n#فيديو_عشوائي #قرآن #بسام #quran';
+        let text = 'ـ ❁ …\n\n\nارح سمعك وقلبك 💛 \n\n\n#فيديو_عشوائي #قرآن #بسام #quran #islamic #islam #bassam';
         
         if (up?.id) {
             await client.Publish(text, up?.id).catch(e => console.log(e));
@@ -173,6 +174,7 @@ setInterval(async () => {
 
 await client.EventTag(false, undefined, async e => {
 
+    console.log(convert(e?.content) + '\n___________');
     await client.like(e?.id).catch(e => console.log(e));
     
 }).catch(e => console.log(e));

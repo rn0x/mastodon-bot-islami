@@ -32,7 +32,7 @@ export default async function screenshot({ quran: quran, tafser1: tafser1, tafse
         let browser = await launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
         }).catch(error => console.log(error));
-        let page = await browser.newPage();
+        let page = await browser?.newPage();
         let html = `file:${path.join(__dirname, './module/searchQuran/index.html')}`;
         await page?.goto(html, { waitUntil: 'load' });
         await page?.setViewport({ width: 900, height: 200 });
